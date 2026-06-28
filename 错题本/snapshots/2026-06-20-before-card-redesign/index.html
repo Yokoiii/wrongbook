@@ -1,0 +1,149 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>错题本</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <div class="app-shell">
+      <aside class="sidebar" aria-label="错题目录">
+        <div class="brand">
+          <span class="brand-mark" aria-hidden="true">
+            <span class="brand-mark-paper"></span>
+            <span class="brand-mark-check"></span>
+          </span>
+          <div>
+            <h1>错题本</h1>
+            <p>按目录收纳题目与解析</p>
+          </div>
+        </div>
+
+        <div class="filter-group">
+          <label for="categoryFilter">科目大类</label>
+          <select id="categoryFilter"></select>
+        </div>
+
+        <div class="filter-group">
+          <label for="subjectFilter">学科</label>
+          <select id="subjectFilter"></select>
+        </div>
+
+        <div class="filter-group">
+          <label for="typeFilter">题型 / 目录</label>
+          <select id="typeFilter"></select>
+        </div>
+
+        <button class="primary-action" id="openManager" type="button">新增学科 / 题型</button>
+      </aside>
+
+      <main class="main-content">
+        <section class="topbar" aria-label="当前目录">
+          <div>
+            <p class="eyebrow">Current Folder</p>
+            <h2 id="currentPath">全部错题</h2>
+          </div>
+          <div class="stats" id="stats"></div>
+        </section>
+
+        <section class="quick-add" aria-label="新增错题">
+          <button class="add-question-button" id="openPasteDialog" type="button" aria-label="新增错题">+</button>
+        </section>
+
+        <nav class="subject-tabs" id="subjectTabs" aria-label="学科快捷筛选"></nav>
+
+        <section class="question-list" id="questionList" aria-live="polite"></section>
+
+        <nav class="pagination" id="pagination" aria-label="错题翻页"></nav>
+      </main>
+    </div>
+
+    <template id="questionTemplate">
+      <article class="question-card">
+        <header class="question-header">
+          <div>
+            <div class="meta-row"></div>
+            <h3></h3>
+          </div>
+          <div class="question-actions"></div>
+        </header>
+
+        <div class="media-block question-media"></div>
+
+        <details class="answer-panel">
+          <summary>查看答案与解析</summary>
+          <div class="answer-content"></div>
+        </details>
+      </article>
+    </template>
+
+    <dialog class="manager-dialog" id="managerDialog">
+      <div class="manager-panel">
+        <header class="manager-header">
+          <div>
+            <p class="eyebrow">Manage Folders</p>
+            <h2>新增模块</h2>
+          </div>
+          <button class="icon-button" id="closeManager" type="button" aria-label="关闭">×</button>
+        </header>
+
+        <section class="manager-section">
+          <h3>新增学科</h3>
+          <form class="inline-form subject-form" id="subjectForm">
+            <select id="subjectCategory"></select>
+            <input id="newSubject" type="text" placeholder="例如：线性代数、操作系统" required />
+            <button type="submit">添加学科</button>
+          </form>
+          <div class="module-list" id="subjectList"></div>
+        </section>
+
+        <section class="manager-section">
+          <h3>新增题型 / 目录</h3>
+          <form class="inline-form folder-form" id="typeForm">
+            <select id="typeCategory"></select>
+            <select id="typeSubject"></select>
+            <input id="newType" type="text" placeholder="例如：一元函数微分学、Cache、证明题" required />
+            <button type="submit">添加目录</button>
+          </form>
+          <div class="module-list" id="typeList"></div>
+        </section>
+      </div>
+    </dialog>
+
+    <dialog class="manager-dialog" id="pasteDialog">
+      <div class="manager-panel">
+        <header class="manager-header">
+          <div>
+            <p class="eyebrow">Paste PNG</p>
+            <h2>新增错题</h2>
+            <p class="dialog-path" id="pastePath"></p>
+          </div>
+          <button class="icon-button" id="closePasteDialog" type="button" aria-label="关闭">×</button>
+        </header>
+
+        <section class="paste-grid">
+          <div class="paste-box" id="questionPasteBox" tabindex="0">
+            <strong>题目截图</strong>
+            <span>点击这里后粘贴 PNG</span>
+            <div class="paste-preview" id="questionPreview"></div>
+          </div>
+
+          <div class="paste-box" id="answerPasteBox" tabindex="0">
+            <strong>解析截图</strong>
+            <span>点击这里后粘贴 PNG</span>
+            <div class="paste-preview" id="answerPreview"></div>
+          </div>
+        </section>
+
+        <div class="paste-actions">
+          <button class="ghost-button" id="clearPaste" type="button">清空</button>
+          <button class="form-submit" id="savePastedQuestion" type="button">保存错题</button>
+        </div>
+      </div>
+    </dialog>
+
+    <script src="./questions.js"></script>
+    <script src="./app.js"></script>
+  </body>
+</html>
