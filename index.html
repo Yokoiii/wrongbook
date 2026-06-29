@@ -198,7 +198,7 @@
       <div class="manager-panel">
         <header class="manager-header">
           <div>
-            <p class="eyebrow">Paste PNG</p>
+            <p class="eyebrow">Paste / Upload</p>
             <h2>新增错题</h2>
             <p class="dialog-path" id="pastePath"></p>
           </div>
@@ -208,14 +208,16 @@
         <section class="paste-grid">
           <div class="paste-box" id="questionPasteBox" tabindex="0">
             <strong>题目截图</strong>
-            <span>点击这里后粘贴 PNG</span>
+            <span>电脑端点击后粘贴图片，手机端点击 + 拍照或选相册</span>
             <div class="paste-preview" id="questionPreview"></div>
+            <input id="questionImageInput" type="file" accept="image/*" hidden />
           </div>
 
           <div class="paste-box" id="answerPasteBox" tabindex="0">
             <strong>解析截图</strong>
-            <span>点击这里后粘贴 PNG</span>
+            <span>电脑端点击后粘贴图片，手机端点击 + 拍照或选相册</span>
             <div class="paste-preview" id="answerPreview"></div>
+            <input id="answerImageInput" type="file" accept="image/*" hidden />
           </div>
         </section>
 

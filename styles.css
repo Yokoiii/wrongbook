@@ -1234,6 +1234,7 @@ textarea {
 .paste-box span {
   color: var(--muted);
   font-size: 14px;
+  line-height: 1.45;
 }
 
 .paste-note-field {
@@ -1258,7 +1259,7 @@ textarea {
 }
 
 .paste-preview:empty::before {
-  content: "等待粘贴";
+  content: "等待图片";
   color: var(--muted);
 }
 
@@ -1332,6 +1333,12 @@ textarea {
   background: var(--soft);
 }
 
+.paste-add-strip:focus-visible {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgb(15 118 110 / 14%);
+  outline: none;
+}
+
 .paste-actions {
   display: flex;
   justify-content: flex-end;
@@ -1366,6 +1373,14 @@ textarea {
 
   .paste-grid {
     grid-template-columns: 1fr;
+  }
+
+  .paste-box {
+    min-height: 260px;
+  }
+
+  .paste-preview-list {
+    grid-template-columns: minmax(0, 1fr) 48px;
   }
 }
 

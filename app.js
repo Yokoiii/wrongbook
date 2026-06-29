@@ -122,6 +122,8 @@
     answerPasteBox: document.querySelector("#answerPasteBox"),
     questionPreview: document.querySelector("#questionPreview"),
     answerPreview: document.querySelector("#answerPreview"),
+    questionImageInput: document.querySelector("#questionImageInput"),
+    answerImageInput: document.querySelector("#answerImageInput"),
     pasteNote: document.querySelector("#pasteNote"),
     clearPaste: document.querySelector("#clearPaste"),
     savePastedQuestion: document.querySelector("#savePastedQuestion"),
@@ -869,11 +871,11 @@
   }
 
   function renderPastePreviews() {
-    renderPastePreviewList(els.questionPreview, state.paste.questionImages, "questionImages", els.questionPasteBox);
-    renderPastePreviewList(els.answerPreview, state.paste.answerImages, "answerImages", els.answerPasteBox);
+    renderPastePreviewList(els.questionPreview, state.paste.questionImages, "questionImages", els.questionPasteBox, els.questionImageInput);
+    renderPastePreviewList(els.answerPreview, state.paste.answerImages, "answerImages", els.answerPasteBox, els.answerImageInput);
   }
 
-  function renderPastePreviewList(container, images, targetKey, pasteBox) {
+  function renderPastePreviewList(container, images, targetKey, pasteBox, fileInput) {
     container.innerHTML = "";
 
     const list = document.createElement("div");
@@ -881,7 +883,7 @@
     if (images.length === 0) {
       const empty = document.createElement("div");
       empty.className = "paste-preview-empty";
-      empty.textContent = "等待粘贴";
+      empty.textContent = "等待图片";
       list.append(empty);
     }
     images.forEach((imageData, index) => {
@@ -906,11 +908,13 @@
     const addButton = document.createElement("button");
     addButton.className = "paste-add-strip";
     addButton.type = "button";
-    addButton.setAttribute("aria-label", "继续粘贴下一张");
+    addButton.setAttribute("aria-label", "添加图片");
+    addButton.title = "拍照或从相册选择";
     addButton.textContent = "+";
     addButton.addEventListener("click", (event) => {
       event.stopPropagation();
-      pasteBox.focus();
+      if (fileInput) fileInput.click();
+      else pasteBox.focus();
     });
     list.append(addButton);
     container.append(list);
@@ -1071,6 +1075,31 @@
       renderPastePreviews();
     };
     reader.readAsDataURL(file);
+  }
+
+  function addImageFiles(files, targetKey) {
+    const selectedFiles = [...(files || [])];
+    if (selectedFiles.length === 0) return;
+
+    const imageFiles = selectedFiles.filter((file) => file && file.type.startsWith("image/"));
+    if (imageFiles.length === 0) {
+      window.alert("请选择图片文件。");
+      return;
+    }
+
+    imageFiles.forEach((file) => {
+      const reader = new FileReader();
+      reader.onload = () => {
+        state.paste[targetKey].push(reader.result);
+        renderPastePreviews();
+      };
+      reader.readAsDataURL(file);
+    });
+  }
+
+  function handleImageInputChange(event, targetKey) {
+    addImageFiles(event.target.files, targetKey);
+    event.target.value = "";
   }
 
   async function savePastedQuestion() {
@@ -1842,6 +1871,8 @@
     });
     els.questionPasteBox.addEventListener("paste", (event) => readPastedImage(event, "questionImages"));
     els.answerPasteBox.addEventListener("paste", (event) => readPastedImage(event, "answerImages"));
+    els.questionImageInput.addEventListener("change", (event) => handleImageInputChange(event, "questionImages"));
+    els.answerImageInput.addEventListener("change", (event) => handleImageInputChange(event, "answerImages"));
     els.pasteNote.addEventListener("input", (event) => {
       state.paste.note = event.target.value;
     });
